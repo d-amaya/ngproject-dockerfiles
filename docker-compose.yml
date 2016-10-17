@@ -1,0 +1,27 @@
+version: '2'
+services:
+  jenkins:
+    image: roldaniel/jenkins:ngproject
+    ports:
+      - "8081:8080"
+      - "50000:50000"
+    volumes:
+      - /home/docker/shared_data/jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/local/bin/docker:/usr/bin/docker
+  mongo:
+    image: mongo:3.3
+    volumes:
+      - /home/docker/shared_data/mongo:/data/db
+    ports:
+      - "27017:27017"
+  rest-api:
+    image: roldaniel/ngproject-api:jdk7
+    ports:
+      - "8080:8080"
+    links:
+      - mongo:mongodb
+  web:
+    image: roldaniel/ng-project:ubuntu
+    ports: 
+      - "80:80"
